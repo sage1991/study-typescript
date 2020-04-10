@@ -11,3 +11,20 @@ function AutoRender<T extends Constructable<Renderable>>(constructable:T) {
     }
   }
 }
+
+
+export function AfterRender(methodName: string) {
+  return function<T extends Constructable<Renderable>>(constructable:T) {
+    return class extends constructable {
+      constructor(...args:any[]) {
+        super(...args);
+        if(methodName in this && typeof (this as any)[methodName] === "function") {
+          (this as any)[methodName]();
+        } else {
+          throw new Error(`cannot execute "${methodName}" method. ${(constructable as any).constructor.name} class does not have that method.`);
+        }
+      }
+    }
+  }
+}
+
