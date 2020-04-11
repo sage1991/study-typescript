@@ -2,7 +2,8 @@ import "./style.css";
 import Article from "./component/Article";
 import Header from "./component/header";
 import Topic from "./component/Topic";
-import CourseForm from "./component/Form";
+import CourseForm from "./component/CourseForm";
+
 
 const main = () => {
   const header = new Header("Decorators");
