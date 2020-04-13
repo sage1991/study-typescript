@@ -1,6 +1,7 @@
 import autoBind from "../decorator/AutoBind";
-import Validateable, { autoValidate, required, minNumber, maxNumber, minLength, maxLength } from "../decorator/validation";
-
+import Project from "../state/Project";
+import projectState from "../state/ProjectState";
+import ProjectType from "../types/ProjectType";
 
 export default class ProjectInput {
   templateElement: HTMLTemplateElement;
@@ -47,19 +48,24 @@ export default class ProjectInput {
     e.preventDefault();
     try {
       const userInput = this.gatherUserInput();
-      console.log(userInput);
+      projectState.addProject(userInput);
       this.clearInput();
-    } catch(err) {
+    } catch (err) {
       alert((err as Error).message);
     }
-    
   }
 
-  private gatherUserInput(): UserInput {
+  private gatherUserInput(): Project {
     const title = this.titleInputElement.value.trim();
     const description = this.descriptionInputElement.value.trim();
     const poeple = +this.peopleInputElement.value.trim();
-    return new UserInput(title, description, poeple);
+    return new Project(
+      Date.now(),
+      title,
+      description,
+      poeple,
+      ProjectType.active
+    );
   }
 
   private clearInput() {
@@ -70,32 +76,5 @@ export default class ProjectInput {
 
   private attach() {
     this.hostElement.insertAdjacentElement("afterbegin", this.element);
-  }
-}
-
-
-@autoValidate("invalid input. please try again!!!!")
-class UserInput implements Validateable {
-
-  @required
-  title:string;
-
-  @required
-  @minLength(10)
-  @maxLength(50)
-  description:string;
-  
-  @maxNumber(5)
-  @minNumber(1)
-  people:number;
-
-  constructor(title:string, description:string, people:number) {
-    this.title = title;
-    this.description = description;
-    this.people = people;
-  }
-  
-  validate() {
-    return true;
   }
 }
