@@ -47,7 +47,7 @@ export default class ProjectInput {
     e.preventDefault();
     try {
       const userInput = this.gatherUserInput();
-      console.log(userInput.title, userInput.description, userInput.people);
+      console.log(userInput);
       this.clearInput();
     } catch(err) {
       alert((err as Error).message);
@@ -85,8 +85,8 @@ class UserInput implements Validateable {
   @maxLength(50)
   description:string;
   
-  @maxNumber(10)
-  @minNumber(5)
+  @maxNumber(5)
+  @minNumber(1)
   people:number;
 
   constructor(title:string, description:string, people:number) {

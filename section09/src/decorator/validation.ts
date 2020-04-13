@@ -127,19 +127,27 @@ export function validate(this: Validateable): boolean {
       for (const condition of constraintList) {
         switch (condition[0]) {
           case Constraint.required:
-            isValid = isValid && !!value;
+            isValid = isValid && value;
             break;
           case Constraint.minLength:
-            isValid = isValid && value.length >= condition[1];
+            if(typeof value.length === "string") {
+              isValid = isValid && value.length >= condition[1];
+            }
             break;
           case Constraint.maxLength:
-            isValid = isValid && value.length <= condition[1];
+            if(typeof value.length === "string") {
+              isValid = isValid && value.length <= condition[1];
+            }
             break;
           case Constraint.minNumber:
-            isValid = isValid && value >= condition[1];
+            if(typeof value === "number") {
+              isValid = isValid && value >= condition[1];
+            }
             break;
           case Constraint.maxNumber:
-            isValid = isValid && value <= condition[1];
+            if(typeof value === "number") {
+              isValid = isValid && value <= condition[1];
+            } 
             break;
         }
       }
@@ -147,6 +155,7 @@ export function validate(this: Validateable): boolean {
   }
   return isValid;
 }
+
 
 function _getClassValidationConfig(className: string): ClassValidationConfig {
   return GLOBAL_VALIDATION_CONFIG[className];
