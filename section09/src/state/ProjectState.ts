@@ -1,6 +1,6 @@
-import Project from "./Project";
+import Project from "../models/Project";
 import State from "./State";
-import ProjectType from "../types/ProjectType";
+import ProjectType from "../models/ProjectType";
 
 const defaultState: Project[] = [];
 

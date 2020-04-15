@@ -1,10 +1,10 @@
-import ProjectType from "../types/ProjectType";
+import ProjectType from "../models/ProjectType";
 import projectState from "../state/ProjectState";
-import Project from "../state/Project";
+import Project from "../models/Project";
 import Component, { InsertPosition } from "./Component";
 import ProjectItem from "./ProjectItem"
-import { DragTarget } from "./Dragable";
-import autoBind from "../decorator/AutoBind";
+import { DragTarget } from "../core/interface/Dragable";
+import autoBind from "../core/decorator/AutoBind";
 
 
 export default class ProjectList extends Component<HTMLDivElement, HTMLElement> implements DragTarget {

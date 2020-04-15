@@ -1,12 +1,11 @@
 import Component, { InsertPosition } from "./Component";
-import Project from "../state/Project";
-import Dragable, { DragTarget } from "./Dragable";
-import autoBind from "../decorator/AutoBind";
+import Project from "../models/Project";
+import Dragable, { DragTarget } from "../core/interface/Dragable";
+import autoBind from "../core/decorator/AutoBind";
 
 export default class ProjectItem
   extends Component<HTMLDivElement, HTMLLIElement>
   implements Dragable {
-  
   // constructor
   constructor(private project: Project) {
     super(
@@ -27,7 +26,7 @@ export default class ProjectItem
       return `${this.project.people} person`;
     }
   }
-  
+
   configure() {
     this.element.addEventListener("dragstart", this.dragStartHandler);
     this.element.addEventListener("dragend", this.dragEndHandler);
@@ -41,14 +40,10 @@ export default class ProjectItem
 
   @autoBind
   dragStartHandler(e: DragEvent) {
-    console.log(e, "dragStartHandler");
     e.dataTransfer!.setData("text/plain", this.project.id.toString());
     e.dataTransfer!.effectAllowed = "move";
   }
 
   @autoBind
-  dragEndHandler(e: DragEvent) {
-    console.log(e, "dragEndHandler");
-  }
-
+  dragEndHandler(e: DragEvent) {}
 }

@@ -1,7 +1,7 @@
 import "./app.css";
 import ProjectInput from "./component/ProjectInput";
 import ProjectList from "./component/ProjectList";
-import ProjectType from "./types/ProjectType";
+import ProjectType from "./models/ProjectType";
 
 const main = () => {
   const projectInput = new ProjectInput();

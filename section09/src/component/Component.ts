@@ -1,4 +1,4 @@
-import Renderable from "./Renderable"
+import Renderable from "../core/interface/Renderable"
 
 export default abstract class Component<T extends HTMLElement, U extends HTMLElement> implements Renderable {
   

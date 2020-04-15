@@ -1,5 +1,5 @@
-import Validateable, { autoValidate, required, minLength, maxLength, maxNumber, minNumber } from "../decorator/validation";
-import ProjectType from "../types/ProjectType";
+import Validateable, { autoValidate, required, minLength, maxLength, maxNumber, minNumber } from "../core/decorator/validation";
+import ProjectType from "./ProjectType";
 
 @autoValidate("invalid input. please try again!!!!")
 export default class Project implements Validateable {

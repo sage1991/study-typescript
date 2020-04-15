@@ -1,4 +1,4 @@
-import Constructable from "../types/Constructable";
+import Constructable from "../interface/Constructable";
 
 interface GlobalValidationConfig {
   [className: string]: ClassValidationConfig;

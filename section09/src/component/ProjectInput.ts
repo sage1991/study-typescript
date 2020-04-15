@@ -1,7 +1,7 @@
-import autoBind from "../decorator/AutoBind";
-import Project from "../state/Project";
+import autoBind from "../core/decorator/AutoBind";
+import Project from "../models/Project";
 import projectState from "../state/ProjectState";
-import ProjectType from "../types/ProjectType";
+import ProjectType from "../models/ProjectType";
 import Component, { InsertPosition } from "./Component";
 
 export default class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {

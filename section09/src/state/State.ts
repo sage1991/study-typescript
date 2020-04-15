@@ -1,5 +1,5 @@
 
-import Project from "./Project";
+import Project from "../models/Project";
 
 type ChangeNotifyListener<T> = (items: T) => void;
 type Reducer<T> = (oldState:T) => T;
