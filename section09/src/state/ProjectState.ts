@@ -1,34 +1,47 @@
 import Project from "./Project";
+import State from "./State";
+import ProjectType from "../types/ProjectType";
 
-type ProjectStateListener = (items:Project[]) => void;
+const defaultState: Project[] = [];
 
-class ProjectState {
-  
-  private listeners: ProjectStateListener[] = [];
-  private projects: Project[] = [];
-  private static instance:ProjectState;
-  
+class ProjectState extends State<Project[]> {
+  private static instance: ProjectState;
+
   static getInstance() {
-    if(!ProjectState.instance) {
+    if (!ProjectState.instance) {
       ProjectState.instance = new ProjectState();
     }
     return ProjectState.instance;
   }
 
-  private constructor() {}
+  private constructor() {
+    super(defaultState);
+  }
 
   addProject(project: Project) {
-    this.projects.push(project);
-    
-    for(let i = 0; i < this.listeners.length; i++) {
-      this.listeners[i](this.projects.slice());
-    }
+    this.setState((oldState: Project[]) => {
+      return [...oldState, project];
+    });
   }
 
-  subscribe(listener:ProjectStateListener) {
-    this.listeners.push(listener);
+  removeProject(project: Project) {
+    this.setState((oldState: Project[]) => {
+      return oldState.filter((prj) => prj.id !== project.id);
+    });
   }
 
+  switchProjectStatus(projectId: number, prjState: ProjectType) {
+    this.setState((oldState: Project[]) => {
+      return oldState
+        .map((prj: Project) => {
+          if (prj.id === projectId) {
+            prj.status = prjState;
+          }
+          return prj;
+        })
+        .slice();
+    });
+  }
 }
 
 const projectState = ProjectState.getInstance();

@@ -2,49 +2,30 @@ import autoBind from "../decorator/AutoBind";
 import Project from "../state/Project";
 import projectState from "../state/ProjectState";
 import ProjectType from "../types/ProjectType";
+import Component, { InsertPosition } from "./Component";
 
-export default class ProjectInput {
-  templateElement: HTMLTemplateElement;
-  hostElement: HTMLDivElement;
-  element: HTMLFormElement;
+export default class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
+
   titleInputElement: HTMLInputElement;
   descriptionInputElement: HTMLInputElement;
   peopleInputElement: HTMLInputElement;
 
   constructor() {
-    this.loadTemplate();
-    this.bindEvent();
-    this.attach();
+    super("project-input", "root", "user-input", InsertPosition.afterBegin);
+    this.configure();
   }
 
-  private loadTemplate() {
-    this.templateElement = document.getElementById(
-      "project-input"
-    )! as HTMLTemplateElement;
-    this.hostElement = document.getElementById("root")! as HTMLDivElement;
-    const importedHtmlNode = document.importNode(
-      this.templateElement.content,
-      true
-    );
-    this.element = importedHtmlNode.firstElementChild as HTMLFormElement;
-    this.element.id = "user-input";
-    this.titleInputElement = this.element.querySelector(
-      "#title"
-    )! as HTMLInputElement;
-    this.descriptionInputElement = this.element.querySelector(
-      "#description"
-    )! as HTMLInputElement;
-    this.peopleInputElement = this.element.querySelector(
-      "#people"
-    )! as HTMLInputElement;
+  configure() {
+    this.titleInputElement = this.element.querySelector("#title")! as HTMLInputElement;
+    this.descriptionInputElement = this.element.querySelector("#description")! as HTMLInputElement;
+    this.peopleInputElement = this.element.querySelector("#people")! as HTMLInputElement;
+    this.element.addEventListener("submit", this.onSubmitHandler);
   }
 
-  private bindEvent() {
-    this.element.addEventListener("submit", this.onSubmit);
-  }
+  renderContent() {}
 
   @autoBind
-  private onSubmit(e: Event) {
+  private onSubmitHandler(e: Event) {
     e.preventDefault();
     try {
       const userInput = this.gatherUserInput();
@@ -72,9 +53,5 @@ export default class ProjectInput {
     this.titleInputElement.value = "";
     this.descriptionInputElement.value = "";
     this.peopleInputElement.value = "";
-  }
-
-  private attach() {
-    this.hostElement.insertAdjacentElement("afterbegin", this.element);
   }
 }

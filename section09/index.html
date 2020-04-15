@@ -8,6 +8,7 @@
     <script src="dist/app.js" defer></script>
   </head>
   <body>
+    <!-- project input class -->
     <template id="project-input">
       <form>
         <div class="form-control">
@@ -25,9 +26,17 @@
         <button type="submit">ADD PROJECT</button>
       </form>
     </template>
+
+    <!-- project item class -->
     <template id="single-project">
-      <li></li>
+      <li draggable="true">
+        <h2></h2>
+        <h3></h3>
+        <p></p>
+      </li>
     </template>
+
+    <!-- project list class -->
     <template id="project-list">
       <section class="projects">
         <header>
@@ -36,6 +45,8 @@
         <ul></ul>
       </section>
     </template>
+
+    <!-- root element -->
     <div id="root"></div>
   </body>
 </html>

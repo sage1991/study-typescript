@@ -1,51 +1,72 @@
 import ProjectType from "../types/ProjectType";
 import projectState from "../state/ProjectState";
 import Project from "../state/Project";
+import Component, { InsertPosition } from "./Component";
+import ProjectItem from "./ProjectItem"
+import { DragTarget } from "./Dragable";
+import autoBind from "../decorator/AutoBind";
 
 
-export default class ProjectList {
+export default class ProjectList extends Component<HTMLDivElement, HTMLElement> implements DragTarget {
 
-  templateElement: HTMLTemplateElement;
-  hostElement: HTMLDivElement;
-  element: HTMLElement;
+  listElement:HTMLUListElement;
+  projectList:ProjectItem[];
   assignedProject:Project[] = [];
+  
+
 
   constructor(private type:ProjectType) {
-
-    this.templateElement = document.getElementById("project-list")! as HTMLTemplateElement;
-    this.hostElement = document.getElementById("root")! as HTMLDivElement;
-    const importedNode = document.importNode(this.templateElement.content, true);
-    this.element = importedNode.firstElementChild as HTMLElement;
-    this.element.id = `${this.type}-projects`;
-    
-    this.attach();
+    super("project-list", "root", `${type}-projects`, InsertPosition.beforeEnd);
+    this.configure();
     this.renderContent();
-
-    projectState.subscribe((projects:Project[]) => {
-      this.assignedProject = projects.filter(project => project.status === this.type);
-      this.renderProject();
-    });
-
   }
   
-  private renderProject() {
+  renderContent() {
     let listEl = document.getElementById(`${this.type}-projects-list`)!;
     listEl.innerHTML = "";
+    this.projectList = [];
     for(const prjItem of this.assignedProject) {
-      const listItem = document.createElement("li") as HTMLLIElement;
-      listItem.textContent = prjItem.title;
-      listEl.appendChild(listItem);
+      this.projectList.push(new ProjectItem(prjItem));
     }
   }
 
-  private renderContent() {
-    const listId = `${this.type}-projects-list`;
-    this.element.querySelector("ul")!.id = listId;
-    this.element.querySelector("h2")!.textContent = this.type.toUpperCase();
+  configure() {
+    
+    this.listElement = (this.element.querySelector("ul")! as HTMLUListElement)
+    this.listElement.id = `${this.type}-projects-list`;
+    this.element.querySelector("h2")!.textContent = `${this.type.toUpperCase()} Project`;
+
+    projectState.subscribe((projects:Project[]) => {
+      this.assignedProject = projects.filter(project => project.status === this.type);
+      this.renderContent();
+    });
+
+    this.element.addEventListener("dragover", this.dragOverHandler);
+    this.element.addEventListener("dragleave", this.dragLeaveHandler);
+    this.element.addEventListener("drop", this.dropHandler);
   }
 
-  private attach() {
-    this.hostElement.insertAdjacentElement("beforeend", this.element);
+  @autoBind
+  dragOverHandler(e: DragEvent) {
+    if(e.dataTransfer && e.dataTransfer.types[0] === "text/plain") {
+      e.preventDefault();  // this allow drop event
+      const listEl = this.element.querySelector("ul")!;
+      listEl.classList.add('droppable');
+    }
+    
+  }
+
+  @autoBind
+  dropHandler(e: DragEvent) {
+    const listEl = this.element.querySelector("ul")!;
+    listEl.classList.remove('droppable');
+    projectState.switchProjectStatus(+e.dataTransfer!.getData("text/plain"), this.type);
+  }
+
+  @autoBind
+  dragLeaveHandler(e: DragEvent) {
+    const listEl = this.element.querySelector("ul")!;
+    listEl.classList.remove('droppable');
   }
 
 }
