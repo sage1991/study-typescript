@@ -5,11 +5,13 @@
   "main": "index.html",
   "scripts": {
     "start": "lite-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.prod.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.5.2",
     "lite-server": "^2.5.4",
     "style-loader": "^1.1.3",

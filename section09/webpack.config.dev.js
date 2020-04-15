@@ -1,8 +1,7 @@
 const path = require("path");
-const CleanPlugin = require("clean-webpack-plugin");
 
 module.exports = {
-  mode: "production",  // or "production"
+  mode: "development",  // or "production"
 
   // entry point of application
   entry: "./src/app.ts",
@@ -14,7 +13,7 @@ module.exports = {
   },
 
   // source map option
-  devtool: "none",
+  devtool: "inline-source-map",
 
   // module option
   module: {
@@ -36,8 +35,4 @@ module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
-
-  plugins: [
-    new CleanPlugin.CleanWebpackPlugin()  // clean output dir when build
-  ]
 };
